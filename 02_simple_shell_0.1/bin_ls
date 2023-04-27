@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# test simple command /bin/ls
+
+# load functions definitions
+. ../functions.sh
+
+command="/bin/ls"
+tmp_file="test_tmp_file_$RANDOM"
+output_file="test_output_file_$RANDOM"
+
+# create a pseudo random file
+touch $tmp_file
+
+# run command
+echo "$command" | $SHELL > $output_file 2> /dev/null
+
+# wait a little bit
+$SLEEP $SLEEPSECONDS
+
+# check the result
+nmatch=`cat $output_file | grep -c "$tmp_file"`
+if [ $nmatch -eq 1 ]; then
+	print_ok
+else
+	print_ko
+fi
+
+# wait a little bit again before clean
+$SLEEP $SLEEPSECONDS
+
+# clean up
+rm -f $tmp_file
+rm -f $output_file

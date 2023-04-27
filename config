@@ -1,0 +1,13 @@
+# Config file
+#
+# Some variables to work with in the files
+
+SHELL="./simple_shell"
+R=$RANDOM
+OUTPUTFILE="test_output_$R"
+ERROROUTPUTFILE="test_error_output_$R"
+ECHO=`which echo`
+TOUCH=`which touch`
+RM=`which rm`
+SLEEP=`which sleep`
+SLEEPSECONDS=1
