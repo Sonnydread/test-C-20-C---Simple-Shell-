@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# test simple command /bin/ls
+# test simple command /bin/ls with a file
 
 # load functions definitions
 . ../functions.sh
@@ -9,27 +9,35 @@ file="test_ls_pwd"
 tmp_file="test_tmp_file_$RANDOM"
 output_file="test_output_file_$RANDOM"
 
+printf "########## INIT TEST ##########\n"
+
 # create a pseudo random file
-echo "creating file $tmp_file ..."
+printf "creating file $tmp_file ...\n"
 sleep 3
 touch $tmp_file
-echo "done!"
+printf "done!\n"
 
 # run command
-echo "reading file $file ..."
+printf "reading file $file ...\n"
 sleep 3
 cat $file | $SHELL > $output_file 2> /dev/null
-echo "done!"
+printf "done!\n"
 
 # wait a little bit
 $SLEEP $SLEEPSECONDS
 
 # check the result
+printf "checking if $tmp_file is listed twice in $output_file ...\n"
+sleep 3
 nmatch=`cat $output_file | grep -c "$tmp_file"`
 if [ $nmatch -eq 2 ]; then
 	print_ok
 else
 	print_ko
+	rm -f $tmp_file
+	rm -f $output_file
+	printf "Something went wrong. [\033[31mPlease fix it.\033[37m]\n"
+	stop_shell
 fi
 
 # wait a little bit again before clean
@@ -37,7 +45,8 @@ $SLEEP $SLEEPSECONDS
 
 echo "removing file $tmp_file ..."
 sleep 3
-echo "done!";
 # clean up
 rm -f $tmp_file
 rm -f $output_file
+printf "\033[32mdone!\033[37m\n"
+printf "########## END TEST ##########\n"

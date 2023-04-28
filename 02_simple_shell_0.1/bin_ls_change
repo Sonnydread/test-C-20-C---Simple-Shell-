@@ -1,30 +1,43 @@
 #!/bin/bash
 #
-# test simple command /bin/ls 5 times
+# test simple command /bin/ls by renaming to hbtn_sc
 
 # load functions definitions
 . ../functions.sh
 
-command="/bin/ls /bin/ls /bin/ls /bin/ls /bin/ls"
+command="/bin/ls"
+renamed="hbtn_sc"
 tmp_file="test_tmp_file_$RANDOM"
 output_file="test_output_file_$RANDOM"
 
 printf "########## INIT TEST ##########\n"
 
-# run command
-printf "executing command $command and saving in $output_file ...\n"
+# create a pseudo random file
+printf "creating random file $tmp_file ...\n"
 sleep 3
-echo "$command" | $SHELL > $output_file 2> /dev/null
+touch $tmp_file
+printf "done!\n"
+
+#rename the command
+printf "copying $command into $renamed ...\n"
+sleep 3
+cp $command $renamed
+printf "done!\n"
+
+# run command
+printf "executing command $renamed and saving in $output_file ...\n"
+sleep 3
+echo "$PWD/$renamed" | $SHELL > $output_file 2> /dev/null
 printf "done!\n"
 
 # wait a little bit
 $SLEEP $SLEEPSECONDS
 
 # check the result
-printf "checking if $tmp_file is listed in $output_file 4 times ...\n"
+printf "checking if $tmp_file is listed in $output_file ...\n"
 sleep 3
-nmatch=`cat $output_file | grep -c "/bin/ls"`
-if [ $nmatch -eq 4 ]; then
+nmatch=`cat $output_file | grep -c "$tmp_file"`
+if [ $nmatch -eq 1 ]; then
 	print_ok
 else
 	print_ko
@@ -42,5 +55,6 @@ sleep 3
 # clean up
 rm -f $tmp_file
 rm -f $output_file
+rm -f $renamed
 printf "\033[32mdone!\033[37m\n"
 printf "########## END TEST ##########\n"

@@ -9,26 +9,44 @@ command="/bin/ls"
 tmp_file="test_tmp_file_$RANDOM"
 output_file="test_output_file_$RANDOM"
 
+printf "########## INIT TEST ##########\n"
+
 # create a pseudo random file
+printf "creating random file $tmp_file ...\n"
+sleep 3
 touch $tmp_file
+printf "done!\n"
 
 # run command
+printf "executing command $command and saving in $output_file ...\n"
+sleep 3
 echo "$command" | $SHELL > $output_file 2> /dev/null
+printf "done!\n"
 
 # wait a little bit
 $SLEEP $SLEEPSECONDS
 
 # check the result
+printf "checking if $tmp_file is listed in $output_file ...\n"
+sleep 3
 nmatch=`cat $output_file | grep -c "$tmp_file"`
 if [ $nmatch -eq 1 ]; then
 	print_ok
 else
 	print_ko
+	rm -f $tmp_file
+	rm -f $output_file
+	printf "Something went wrong. [\033[31mPlease fix it.\033[37m]\n"
+	stop_shell
 fi
 
 # wait a little bit again before clean
 $SLEEP $SLEEPSECONDS
 
+printf "removing files ...\n"
+sleep 3
 # clean up
 rm -f $tmp_file
 rm -f $output_file
+printf "\033[32mdone!\033[37m\n"
+printf "########## END TEST ##########\n"

@@ -41,13 +41,12 @@ function print_ok()
 # Returns:
 #   None
 #######################################
-#function stop_shell()
-#{
-#    if [ `pidof $SHELL | wc -l` -ne 0 ]; then
-#	   killall -9 $SHELL 2>&1 > /dev/null
-#    fi
-#    rm -f $OUTPUTFILE $ERROROUTPUTFILE
-#}
+function stop_shell()
+{
+    if [ `pidof $SHELL | wc -l` -ne 0 ]; then
+	   kill `pidof $SHELL`
+    fi
+}
 #
 ## Load configuration
 #source config
