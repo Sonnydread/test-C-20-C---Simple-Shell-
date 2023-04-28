@@ -1,11 +1,12 @@
 #!/bin/bash
 #
-# test simple command /bin/pwd
+# test simple command /bin/ls 5 times
 
-# load funtion definitions
+# load functions definitions
 . ../functions.sh
 
-command="/bin/pwd"
+command="/bin/ls /bin/ls /bin/ls /bin/ls /bin/ls"
+tmp_file="test_tmp_file_$RANDOM"
 output_file="test_output_file_$RANDOM"
 
 # run command
@@ -15,15 +16,16 @@ echo "$command" | $SHELL > $output_file 2> /dev/null
 $SLEEP $SLEEPSECONDS
 
 # check the result
-nmatch=`cat $output_file | grep -c "$(echo $PWD)"`
-if [ $nmatch -eq 1 ]; then
-	   print_ok
+nmatch=`cat $output_file | grep -c "/bin/ls"`
+if [ $nmatch -eq 4 ]; then
+	print_ok
 else
-	   print_ko
+	print_ko
 fi
 
 # wait a little bit again before clean
 $SLEEP $SLEEPSECONDS
 
 # clean up
+rm -f $tmp_file
 rm -f $output_file

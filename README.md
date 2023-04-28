@@ -8,6 +8,4 @@ This repository is a collection of test to check as many cases as the `simple_sh
 ## 02_simple_shel_0.1
 In this directories we are testing different cases for commands with full path; for instance, `/bin/ls`, `/bin/pwd`, etc.
 + The names of the files in this directory are self explanatories.
-+ A preview of the file `bin_ls`:
-```bash
-```
++ There are some files with commands to work with. Its names begin with `test_`.

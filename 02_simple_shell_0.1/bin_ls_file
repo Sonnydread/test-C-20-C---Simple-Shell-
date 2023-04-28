@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# test simple command /bin/ls
+
+# load functions definitions
+. ../functions.sh
+
+file="test_ls_pwd"
+tmp_file="test_tmp_file_$RANDOM"
+output_file="test_output_file_$RANDOM"
+
+# create a pseudo random file
+echo "creating file $tmp_file ..."
+sleep 3
+touch $tmp_file
+echo "done!"
+
+# run command
+echo "reading file $file ..."
+sleep 3
+cat $file | $SHELL > $output_file 2> /dev/null
+echo "done!"
+
+# wait a little bit
+$SLEEP $SLEEPSECONDS
+
+# check the result
+nmatch=`cat $output_file | grep -c "$tmp_file"`
+if [ $nmatch -eq 2 ]; then
+	print_ok
+else
+	print_ko
+fi
+
+# wait a little bit again before clean
+$SLEEP $SLEEPSECONDS
+
+echo "removing file $tmp_file ..."
+sleep 3
+echo "done!";
+# clean up
+rm -f $tmp_file
+rm -f $output_file
