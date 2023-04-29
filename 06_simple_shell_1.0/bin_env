@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Set the environment variable FOO
+export FOO="bar"
+
+# Run the shell and execute the "env" command
+echo "Testing 'env' built-in command"
+echo "-------------------------------"
+echo "Running the shell..."
+echo "env" | ./holberton_shell > output.txt
+echo "Shell finished"
+
+# Check the output of the command
+echo "Checking output..."
+if grep -q "FOO=bar" output.txt; then
+  echo "PASSED"
+else
+  echo "FAILED"
+fi
+
+# Clean up
+rm output.txt
+unset FOO
