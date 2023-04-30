@@ -1,0 +1,4 @@
+# This file works with bin_ls_args_file file
+
+/bin/ls -l /tmp
+/bin/ls -l -a /var

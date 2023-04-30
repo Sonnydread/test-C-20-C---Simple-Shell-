@@ -1,0 +1,69 @@
+#!/bin/bash
+#
+# test simple command /bin/ls with arguments
+
+# load functions definitions
+. ../functions.sh
+
+FILE="test_ls_args"
+DIR1="/tmp"
+DIR2="/var"
+tmp_file="test_tmp_file_$RANDOM"
+output_file="test_output_file_$RANDOM"
+
+printf "########## INIT TEST ##########\n"
+
+# create a pseudo random file
+printf "creating random file $tmp_file and moving them to /tmp and /var dirs ...\n"
+sleep 3
+touch $tmp_file
+cp $tmp_file $DIR2
+mv $tmp_file $DIR1
+printf "done!\n"
+
+# run command
+printf "executing commands from file $FILE with arguments ...\n"
+sleep 3
+cat $FILE | $SHELL > $output_file 2> /dev/null
+printf "done!\n"
+
+# wait a little bit
+$SLEEP $SLEEPSECONDS
+
+# check the result
+printf "checking if $tmp_file is listed twice in $output_file ...\n"
+sleep 3
+nmatch=`cat $output_file | grep -c "$tmp_file"`
+
+# count total of items for each directorie
+count_item=`echo "/bin/ls -l /var" | $SHELL | wc -l`
+count_item_hdd=`echo "/bin/ls -l -a /tmp" | $SHELL | wc -l`
+
+# total of files and directories listed including hidden ones
+# -2 because wc -l prints the total header
+total_fildirs=$(($count_item + $count_item_hdd - 2))
+
+num_lines=`cat $output_file | wc -l`
+
+if [[ $nmatch -eq 2 ]] && [[ $(($num_lines - 2)) -eq $total_fildirs  ]]; then
+	print_ok
+else
+	print_ko
+	rm -f "$DIR1/$tmp_file"
+	rm -f "$DIR2/$tmp_file"
+	#rm -f $output_file
+	printf "Something went wrong. [\033[31mPlease fix it.\033[37m]\n"
+	stop_shell
+fi
+
+# wait a little bit again before clean
+$SLEEP $SLEEPSECONDS
+
+printf "removing files ...\n"
+sleep 3
+# clean up
+rm -f "$DIR1/$tmp_file"
+rm -f "$DIR2/$tmp_file"
+rm -f $output_file
+printf "\033[32mdone!\033[37m\n"
+printf "########## END TEST ##########\n"
